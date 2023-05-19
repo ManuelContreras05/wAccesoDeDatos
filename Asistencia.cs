@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+//Agregar la libreria que nos permita usar los metodos
+using wAccesoDeDatos.CLASES;
 
 namespace wAccesoDeDatos
 {
@@ -17,80 +19,198 @@ namespace wAccesoDeDatos
         {
             InitializeComponent();
         }
-
+        //Definir una variable para obtener el usuario actual, el que se encuentra en ese momento en la clase 
+        public clsUsuarios usuariosActual { get; set; }
         private void btnInsertar_Click(object sender, EventArgs e)
         {
             try
             {
-                SqlConnection conexion = new SqlConnection("server=LAPTOP-MH17Q20V\\SQLEXPRESS;database=dboColegio;integred security=true");
-                conexion.Open();
+                //Validacion de los cuadros de textos 
+                if (txtId.Text == "")
+                {
+                    errorProvider1.SetError(txtId, "Debe ingresar el id del estudiante");
+                    txtId.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtId, "");
 
-                clsConexion clsConexion = new clsConexion(txtNombre.Text, txtApellido.Text, Convert.ToInt32(txtEdad.Text), cmbGrado.Text, Convert.ToInt32(txtTelefono.Text), txtInstitucion.Text, txtCorreo.Text, cmbGenero.Text);
-                clsConexion.insertarDatos();
+                //Validacion de nombre
+                if (txtNombre.Text == "")
+                {
+                    errorProvider1.SetError(txtNombre, "Debe ingresar el nombre del estudiante");
+                    txtNombre.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtNombre, "");
 
-                MessageBox.Show("Dato ingresado");
+                //Validacion Apellido
+                if (txtApellido.Text == "")
+                {
+                    errorProvider1.SetError(txtApellido, "Debe ingresar el apellido del estudiante");
+                    txtApellido.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtApellido, "");
 
-                dtgData.DataSource = clsConexion.consultarDatos();
+
+                //Validacion de edad 
+                if (txtEdad.Text == "")
+                {
+                    errorProvider1.SetError(txtEdad, "Debe ingresar la edad del estudiante");
+                    txtEdad.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtEdad, "");
+
+                //validacion de Grado
+                if (cmbGrado.Text == "")
+                {
+                    errorProvider1.SetError(cmbGrado, "Debe ingresar el grado del estudiante");
+                    cmbGrado.Focus();
+                    return;
+                }
+                errorProvider1.SetError(cmbGrado, "");
+
+                //validacion de telefono
+                if (txtTelefono.Text == "")
+                {
+                    errorProvider1.SetError(txtTelefono, "Debe ingresar el telefono del estudiante");
+                    txtTelefono.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtTelefono, "");
+
+                //Validacion de la institucion
+                if (txtInstitucion.Text == "")
+                {
+                    errorProvider1.SetError(txtInstitucion, "Debe ingresar nombre 'Institucion o Universidad'");
+                    txtInstitucion.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtInstitucion, "");
+
+                //Validacion de correo
+                if (txtCorreo.Text == "")
+                {
+                    errorProvider1.SetError(txtCorreo, "Debe ingresar el correo electronico");
+                    txtCorreo.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtCorreo, "");
+
+                //Validacion de genero 
+                if (cmbGenero.Text == "")
+                {
+                    errorProvider1.SetError(cmbGenero, "Debe ingresar sexo del estudiante");
+                    cmbGenero.Focus();
+                    return;
+                }
+                errorProvider1.SetError(cmbGenero, "");
+
+                //generar una instancia a la clase usuario
+                clsUsuarios insertar = new clsUsuarios();
+                //enviar la info directo a la clase usuario
+                //esa info se enviara a la consulta y esta la enviara a la tabla asistencia
+                insertar.Intid = Convert.ToInt32(txtId.Text);
+                insertar.StrNombre = txtNombre.Text;
+                insertar.StrApellido = txtApellido.Text;
+                insertar.IntEdad = Convert.ToInt32(txtEdad.Text);
+                insertar.StrGrado = cmbGrado.Text;
+                insertar.IntTelefono = Convert.ToInt32(txtTelefono.Text);
+                insertar.StrInstitucion = txtInstitucion.Text;
+                insertar.StrCorreo = txtCorreo.Text;
+                insertar.StrGenero = cmbGenero.Text;
+
+                //Generamos instancia al metodo insertar, para enviar la info a la tabla asistencia
+                int estado = clsFunciones.insertarDatos(insertar);
+                if (estado > 0)
+                {
+                    MessageBox.Show("Datos guardados");
+                    limpiar();
+                }
+                else 
+                {
+                    MessageBox.Show("Error al ingresar el dato ");
+
+                }
+                llenarTabla();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error al ingresar el dato" + ex.Message);
+                
                 throw;
             }
         }
+        //Crear metodo para limpiar 
+        private void limpiar()
+        {
+            txtId.Text = "";
+            txtNombre.Text = "";
+            txtApellido.Text = "";
+            txtEdad.Text = "";
+            cmbGrado.Text = "";
+            txtTelefono.Text = "";
+            txtInstitucion.Text = "";
+            txtCorreo.Text = "";
+            cmbGenero.Text = "";
+            txtNombre.Focus();
+        }
 
-        private void btnModificar_Click(object sender, EventArgs e)
+        private void btnMostrar_Click(object sender, EventArgs e)
+        {
+            llenarTabla();
+
+        }
+        //metodo para llenar tabla 
+        private void llenarTabla()
+        {
+            //gerenamos una instancia a la clase funciones para usar el metodo
+            dtgData.DataSource = clsFunciones.mostrarRegistro();
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
             try
             {
-                SqlConnection conexion = new SqlConnection("server=LAPTOP-MH17Q20V\\SQLEXPRESS;database=dboColegio;integred security=true");
-                conexion.Open();
+                if (txtId.Text == "")
+                {
+                    errorProvider1.SetError(txtId, "Debe ingresar el id del estudiante");
+                    txtId.Focus();
+                    return;
+                }
+                errorProvider1.SetError(txtId, "");
 
-                clsConexion clsConexion = new clsConexion();
-                dtgData.DataSource = clsConexion.consultarDatos();
+                dtgData.DataSource = clsFunciones.buscar(Convert.ToInt32(txtId.Text));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error al consultar el dato" + ex.Message);
                 throw;
             }
         }
-        private void btnEliminar_Click(object sender, EventArgs e)
+
+        private void btnRegistro_Click(object sender, EventArgs e)
         {
             try
             {
-                SqlConnection conexion = new SqlConnection("server=LAPTOP-MH17Q20V\\SQLEXPRESS;database=dboColegio;integred security=true");
-                conexion.Open();
+                int eliminar = clsFunciones.eliminarUsuario(usuariosActual);
 
-                clsConexion clsConexion = new clsConexion();
-                clsConexion.eliminarDato(txtNombre.Text);
+                if (eliminar > 0)
+                {
+                    MessageBox.Show("Usuario eliminado");
+                    limpiar();
+                }
+                else 
+                {
+                    MessageBox.Show("Error en eliminar usuario ");
 
-                dtgData.DataSource = clsConexion.consultarDatos();
-
-
+                }
+                llenarTabla();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("error al eliminar registro" + ex.Message);
                 throw;
             }
-        }
-
-        private void dtgData_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SqlConnection conexion = new SqlConnection("server=LAPTOP-MH17Q20V\\SQLEXPRESS;database=dboColegio;integred security=true");
-            conexion.Open();
-
-            txtNombre.Text = dtgData.SelectedRows[0].Cells[0].Value.ToString();
-            txtApellido.Text = dtgData.SelectedRows[0].Cells[1].Value.ToString();
-            txtEdad.Text  = dtgData.SelectedRows[0].Cells[2].Value.ToString();
-            cmbGrado.Text = dtgData.SelectedRows[0].Cells[3].Value.ToString();
-            txtTelefono.Text = dtgData.SelectedRows[0].Cells[4].Value.ToString();
-            txtInstitucion.Text = dtgData.SelectedRows[0].Cells[5].Value.ToString();
-            txtCorreo.Text = dtgData.SelectedRows[0].Cells[6].Value.ToString();
-            cmbGenero.Text = dtgData.SelectedRows[0].Cells[7].Value.ToString();
-
         }
     }
 }

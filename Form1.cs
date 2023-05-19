@@ -24,5 +24,11 @@ namespace wAccesoDeDatos
         {
             asistencia.ShowDialog();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            clsConexion.crearConexion();
+            MessageBox.Show("Conexion exitosa");
+        }
     }
 }

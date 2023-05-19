@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.lblEdad = new System.Windows.Forms.Label();
@@ -43,12 +44,17 @@
             this.lblGenero = new System.Windows.Forms.Label();
             this.cmbGenero = new System.Windows.Forms.ComboBox();
             this.btnInsertar = new System.Windows.Forms.Button();
-            this.btnModificar = new System.Windows.Forms.Button();
-            this.btnEliminar = new System.Windows.Forms.Button();
+            this.btnMostrar = new System.Windows.Forms.Button();
+            this.btnBuscar = new System.Windows.Forms.Button();
             this.dtgData = new System.Windows.Forms.DataGridView();
             this.lblApellido = new System.Windows.Forms.Label();
             this.txtApellido = new System.Windows.Forms.TextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnRegistro = new System.Windows.Forms.Button();
+            this.lblId = new System.Windows.Forms.Label();
+            this.txtId = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtgData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblNombre
@@ -190,25 +196,25 @@
             this.btnInsertar.UseVisualStyleBackColor = true;
             this.btnInsertar.Click += new System.EventHandler(this.btnInsertar_Click);
             // 
-            // btnModificar
+            // btnMostrar
             // 
-            this.btnModificar.Location = new System.Drawing.Point(224, 241);
-            this.btnModificar.Name = "btnModificar";
-            this.btnModificar.Size = new System.Drawing.Size(128, 23);
-            this.btnModificar.TabIndex = 15;
-            this.btnModificar.Text = "Modificar";
-            this.btnModificar.UseVisualStyleBackColor = true;
-            this.btnModificar.Click += new System.EventHandler(this.btnModificar_Click);
+            this.btnMostrar.Location = new System.Drawing.Point(224, 241);
+            this.btnMostrar.Name = "btnMostrar";
+            this.btnMostrar.Size = new System.Drawing.Size(128, 23);
+            this.btnMostrar.TabIndex = 15;
+            this.btnMostrar.Text = "Mostrar Datos";
+            this.btnMostrar.UseVisualStyleBackColor = true;
+            this.btnMostrar.Click += new System.EventHandler(this.btnMostrar_Click);
             // 
-            // btnEliminar
+            // btnBuscar
             // 
-            this.btnEliminar.Location = new System.Drawing.Point(427, 241);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(128, 23);
-            this.btnEliminar.TabIndex = 16;
-            this.btnEliminar.Text = "Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = true;
-            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            this.btnBuscar.Location = new System.Drawing.Point(427, 241);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(128, 23);
+            this.btnBuscar.TabIndex = 16;
+            this.btnBuscar.Text = "Buscar ";
+            this.btnBuscar.UseVisualStyleBackColor = true;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // dtgData
             // 
@@ -217,7 +223,6 @@
             this.dtgData.Name = "dtgData";
             this.dtgData.Size = new System.Drawing.Size(846, 247);
             this.dtgData.TabIndex = 17;
-            this.dtgData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgData_CellContentClick);
             // 
             // lblApellido
             // 
@@ -235,16 +240,49 @@
             this.txtApellido.Size = new System.Drawing.Size(167, 20);
             this.txtApellido.TabIndex = 19;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // btnRegistro
+            // 
+            this.btnRegistro.Location = new System.Drawing.Point(629, 241);
+            this.btnRegistro.Name = "btnRegistro";
+            this.btnRegistro.Size = new System.Drawing.Size(128, 23);
+            this.btnRegistro.TabIndex = 20;
+            this.btnRegistro.Text = "Eliminar registro";
+            this.btnRegistro.UseVisualStyleBackColor = true;
+            this.btnRegistro.Click += new System.EventHandler(this.btnRegistro_Click);
+            // 
+            // lblId
+            // 
+            this.lblId.AutoSize = true;
+            this.lblId.Location = new System.Drawing.Point(141, 50);
+            this.lblId.Name = "lblId";
+            this.lblId.Size = new System.Drawing.Size(15, 13);
+            this.lblId.TabIndex = 21;
+            this.lblId.Text = "id";
+            // 
+            // txtId
+            // 
+            this.txtId.Location = new System.Drawing.Point(162, 47);
+            this.txtId.Name = "txtId";
+            this.txtId.Size = new System.Drawing.Size(58, 20);
+            this.txtId.TabIndex = 22;
+            // 
             // form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(996, 569);
+            this.Controls.Add(this.txtId);
+            this.Controls.Add(this.lblId);
+            this.Controls.Add(this.btnRegistro);
             this.Controls.Add(this.txtApellido);
             this.Controls.Add(this.lblApellido);
             this.Controls.Add(this.dtgData);
-            this.Controls.Add(this.btnEliminar);
-            this.Controls.Add(this.btnModificar);
+            this.Controls.Add(this.btnBuscar);
+            this.Controls.Add(this.btnMostrar);
             this.Controls.Add(this.btnInsertar);
             this.Controls.Add(this.cmbGenero);
             this.Controls.Add(this.lblGenero);
@@ -263,6 +301,7 @@
             this.Name = "form2";
             this.Text = "Asistencia";
             ((System.ComponentModel.ISupportInitialize)(this.dtgData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -285,10 +324,14 @@
         private System.Windows.Forms.Label lblGenero;
         private System.Windows.Forms.ComboBox cmbGenero;
         private System.Windows.Forms.Button btnInsertar;
-        private System.Windows.Forms.Button btnModificar;
-        private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.Button btnMostrar;
+        private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.DataGridView dtgData;
         private System.Windows.Forms.Label lblApellido;
         private System.Windows.Forms.TextBox txtApellido;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Button btnRegistro;
+        private System.Windows.Forms.TextBox txtId;
+        private System.Windows.Forms.Label lblId;
     }
 }
