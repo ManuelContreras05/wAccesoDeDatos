@@ -14,7 +14,6 @@ namespace wAccesoDeDatos.CLASES
         //Crear metodo para insertar info en la base de datos
         public static int insertarDatos(clsUsuarios add)
         {
-
             int estado = 0;
 
             SqlCommand comando = new SqlCommand(string.Format("insert into tblEstudiantes values(@intid,@strNombre,@strApellido,@intEdad,@strGrado,@intTelefono,@strInstitucion,@strCorreo,@strGenero)",
@@ -101,7 +100,7 @@ namespace wAccesoDeDatos.CLASES
         //{
         //    clsUsuarios datos = new clsUsuarios();
 
-        //    SqlCommand comando = new SqlCommand(string.Format("select * from tblEstudiantes where id = '{0}'", id), clsConexion.crearConexion());
+        //    SqlCommand comando = new SqlCommand(string.Format("select * from tblEstudiantes where @id = {0}", id), clsConexion.crearConexion());
 
         //    SqlDataReader leer = comando.ExecuteReader();
 
@@ -120,22 +119,13 @@ namespace wAccesoDeDatos.CLASES
         //    return datos;
         //}
         //Metodo para elminar registro
-        public static int eliminarUsuario(clsUsuarios add)
+        public static int eliminarUsuario(int id)
         {
-           
-            int estado = 0;
+            SqlCommand comando = new SqlCommand(string.Format("DELETE FROM tblEstudiantes WHERE id = '{0}'", id), clsConexion.crearConexion());
 
-            SqlCommand comando = new SqlCommand(string.Format("delete from tblEstudiantes values(@intid,@strNombre,@strApellido,@intEdad,@strGrado,@intTelefono,@strInstitucion,@strCorreo,@strGenero)", clsConexion.crearConexion()));
+            int eliminado = comando.ExecuteNonQuery();
 
-            SqlDataReader leer = comando.ExecuteReader();
-
-            return estado;
-
-            //SqlCommand comando = new SqlCommand(string.Format("delete from tblEstudiantes where id = '{0}'", id), clsConexion.crearConexion());
-
-            //int eliminado = comando.ExecuteNonQuery();
-
-            //return eliminado;
+            return eliminado;
         }
     }
 }

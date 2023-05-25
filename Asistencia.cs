@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,7 @@ namespace wAccesoDeDatos
         {
             InitializeComponent();
         }
-        //Definir una variable para obtener el usuario actual, el que se encuentra en ese momento en la clase 
-        public clsUsuarios usuariosActual { get; set; }
+
         private void btnInsertar_Click(object sender, EventArgs e)
         {
             try
@@ -131,14 +131,15 @@ namespace wAccesoDeDatos
                 else 
                 {
                     MessageBox.Show("Error al ingresar el dato ");
-
                 }
                 llenarTabla();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+
+                MessageBox.Show("Error al ingresar el dato " + ex);
+
                 throw;
             }
         }
@@ -154,9 +155,8 @@ namespace wAccesoDeDatos
             txtInstitucion.Text = "";
             txtCorreo.Text = "";
             cmbGenero.Text = "";
-            txtNombre.Focus();
+            txtId.Focus();
         }
-
         private void btnMostrar_Click(object sender, EventArgs e)
         {
             llenarTabla();
@@ -168,7 +168,6 @@ namespace wAccesoDeDatos
             //gerenamos una instancia a la clase funciones para usar el metodo
             dtgData.DataSource = clsFunciones.mostrarRegistro();
         }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -183,34 +182,92 @@ namespace wAccesoDeDatos
 
                 dtgData.DataSource = clsFunciones.buscar(Convert.ToInt32(txtId.Text));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show("Error " + ex);
                 throw;
             }
         }
 
-        private void btnRegistro_Click(object sender, EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
             try
             {
-                int eliminar = clsFunciones.eliminarUsuario(usuariosActual);
+                    int eliminar = clsFunciones.eliminarUsuario(Convert.ToInt32(txtId.Text));
 
-                if (eliminar > 0)
-                {
-                    MessageBox.Show("Usuario eliminado");
-                    limpiar();
-                }
-                else 
-                {
-                    MessageBox.Show("Error en eliminar usuario ");
+                    if (eliminar > 0)
+                    {
+                        MessageBox.Show("Usuario eliminado");
+                        limpiar();
 
-                }
-                llenarTabla();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error en eliminar usuario ");
+
+                    } 
+                    llenarTabla();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
+                MessageBox.Show("Error al eliminar el usuario: " + ex.Message);
+
                 throw;
             }
         }
+        
+        private void dtgData_CellClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+            txtId.Text = this.dtgData.CurrentRow.Cells[0].Value.ToString();
+            txtNombre.Text = this.dtgData.CurrentRow.Cells[1].Value.ToString();
+            txtApellido.Text = this.dtgData.CurrentRow.Cells[2].Value.ToString();
+            txtEdad.Text = this.dtgData.CurrentRow.Cells[3].Value.ToString();
+            cmbGrado.Text = this.dtgData.CurrentRow.Cells[4].Value.ToString();
+            txtTelefono.Text = this.dtgData.CurrentRow.Cells[5].Value.ToString();
+            txtInstitucion.Text = this.dtgData.CurrentRow.Cells[6].Value.ToString();
+            txtCorreo.Text = this.dtgData.CurrentRow.Cells[7].Value.ToString();
+            cmbGenero.Text = this.dtgData.CurrentRow.Cells[8].Value.ToString();
+
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            // Obtener los datos del DataGridView y guardarlos en una lista de cadenas
+            var datos = new  System.Collections.Generic.List<string>();
+
+            foreach (DataGridViewRow fila in dtgData.Rows)
+            {
+                if (!fila.IsNewRow)//Omitir la ultima fila nueva
+                {
+                    string filaDatos = "";
+
+                    foreach (DataGridViewCell celda in fila.Cells)
+                    {
+                        filaDatos += celda.Value.ToString() + "\t"; // Separar las columnas por un tabulador
+                    }
+                    datos.Add(filaDatos.TrimEnd('\t'));// Agregar la fila a la lista   
+                }
+            }
+            try
+            {
+                using (StreamWriter archivo = new StreamWriter(@"C:\\Users\\Manuel\\OneDrive\\Escritorio\\prueba.txt")) 
+                {
+                    foreach (string fila in datos)
+                    {
+                        archivo.WriteLine(fila);
+                    }
+                
+                }
+                MessageBox.Show("Los datos se han guardado correctamente en el archivo.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar los datos: " + ex.Message);
+                throw;
+            }
+
+        }
     }
-}
+} 

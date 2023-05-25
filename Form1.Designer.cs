@@ -134,6 +134,7 @@
             this.Controls.Add(this.lblFormativo);
             this.Controls.Add(this.lblEvento);
             this.Controls.Add(this.menuStrip1);
+            this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Procesos Formativos";
